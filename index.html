@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+    <meta charset="UTF-8">
+    <title>Click Button with Firebase!</title>
+
+    <!-- -->
+    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+
+</head>
+
+<body>
+
+<!-- -->
+<h1>Ouch! You've clicked me
+    <span id="click-value"></span> times!</h1>
+
+<!-- -->
+<button id="click-button">Click Me!!!!</button>
+<button id="restart-button">Restart</button>
+
+<!-- -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<!-- ================================================================================== -->
+
+<script src="https://www.gstatic.com/firebasejs/5.2.0/firebase.js"></script>
+<script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyCcO255O7uwoDlenSLKIM-YfD4Na0T7Hzk",
+        authDomain: "uclabootcamptest.firebaseapp.com",
+        databaseURL: "https://uclabootcamptest.firebaseio.com",
+        projectId: "uclabootcamptest",
+        storageBucket: "uclabootcamptest.appspot.com",
+        messagingSenderId: "1055620466691"
+    };
+    firebase.initializeApp(config);
+
+    // VARIABLES
+    // --------------------------------------------------------------------------------
+
+    var database = firebase.database();
+    var clickCounter = 100;
+
+    // FUNCTIONS + EVENTS
+    // --------------------------------------------------------------------------------
+
+    $("#click-button").on("click", function() {
+        clickCounter--;
+        database.ref().set({
+            clickCount: clickCounter
+        });
+    });
+    $("#restart-button").on("click", function() {
+        clickCounter= 100;
+        database.ref().set({
+            clickCount: clickCounter,
+            user : 'Imen Mahjoubi',
+            email : 'Imahjoubi@snap.com',
+            age : '26',
+            description : 'this is simple exercise using FireBase which is awesome!!'
+        });
+    });
+    // MAIN PROCESS + INITIAL CODE
+    // --------------------------------------------------------------------------------
+
+    database.ref().on("value", function(snapshot) {
+        console.log(snapshot.val());
+        $("#click-value").text(snapshot.val().clickCount);
+        clickCounter = snapshot.val().clickCount;
+    }, function(errorObject) {
+        console.log("The read failed: " + errorObject.code);
+    });
+
+</script>
+
+</body>
+
+</html>
